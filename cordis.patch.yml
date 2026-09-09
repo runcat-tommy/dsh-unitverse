@@ -1,0 +1,5 @@
+# Bundle layer contributed by dsh-unit-conversion.
+# Inserts the plugin row that loads the package's tool module.
+- insert:
+    - id: unit-conversion
+      name: dsh-unit-conversion

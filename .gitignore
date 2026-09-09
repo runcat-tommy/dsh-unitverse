@@ -1,0 +1,7 @@
+node_modules/
+coverage/
+*.log
+.DS_Store
+*.tsbuildinfo
+# Research scratch material (kept locally only, not part of the package).
+research/
