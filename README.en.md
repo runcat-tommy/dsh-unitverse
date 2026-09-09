@@ -15,6 +15,8 @@ plus both absolute-temperature and temperature-difference (Δ) modes.
 - ✅ Pure TypeScript, zero runtime dependencies, side-effect free and unit-testable
 - ✅ Results rounded to ~10 significant digits by default
 - ✅ Clear errors for unknown units or cross-category requests
+- ✅ **Web UI view**: a "Unit Converter" tab next to Conversation / Trajectory
+  in the session view bar (since v0.1.0, requires the DSH Web GUI, 0.1.0-rc.6+)
 
 ## Supported categories and units
 
@@ -48,6 +50,30 @@ dsh plugin --profile <profile-name> add github:runcat-tommy/dsh-unit-conversion
 
 `package.json` declares `dsh.bundle`, so `dsh plugin add` registers the plugin
 row from `cordis.patch.yml` automatically.
+
+> The package also ships a browser half: the `dsh.client` declaration plus
+> `lib/client.js` behind the `exports["./client"]` entry. Installed into a
+> profile that runs the Web GUI, a "Unit Converter" tab appears in the session
+> view bar (see **Web converter view** below). In CLI-only profiles the client
+> part is simply never loaded and the tool keeps working.
+
+## Web converter view (v0.1.0+)
+
+After installing and restarting the DSH GUI process (`dsh web` etc.), open any
+session: the view tab bar now shows **"Unit Converter"** next to Conversation /
+Trajectory (locale-aware; the Chinese UI shows 单位换算):
+
+- Type a **value** plus **source / target units** (symbol, English or Chinese
+  spelling) — the result and its category appear instantly;
+- One-click **⇄ swap** of source and target;
+- Autocomplete suggestions for every supported unit;
+- Recent conversions persist in browser localStorage; click any history row to
+  restore it, or clear the list with one click;
+- Temperature supports absolute scales (`°C → °F`) as well as differences
+  (`Δ°C → Δ°F`);
+- The view is **pure front-end**: the conversion core is bundled into
+  `lib/client.js`, so conversions run locally in the browser — no model or
+  server round-trip involved.
 
 ## Usage
 
@@ -128,21 +154,32 @@ convertDetailed(3, 'km/h', 'm/s')        // { result: 0.833..., summary: '...' }
 
 ```bash
 npm install
-npm test          # full vitest suite (conversions, aliases, temperature, edges, plugin registration)
+npm test          # full vitest suite (conversions, aliases, temperature, edges,
+                  # plugin registration, lib/client.js smoke tests)
 npm run typecheck # tsc --noEmit
-npm run build     # tsup -> lib/ (ESM + CJS + d.ts; artifacts are committed so GitHub installs work)
+npm run build     # tsup -> lib/ (ESM + CJS + d.ts), then scripts/build-client.mjs
+                  # emits lib/client.js (the ModuleLoader lazy-CJS bundle)
 ```
 
 ## Repository layout
 
 ```
-src/units.ts     unit tables and alias index (single source of truth)
-src/convert.ts   conversion engine: parsing, converting, temperature/Δ, precision, errors
-src/index.ts     DSH plugin entry: registers the convert tool
-test/            Vitest tests
-cordis.patch.yml DSH bundle patch layer
-lib/             tsup build output (committed so GitHub installs need no build)
+src/units.ts             unit tables and alias index (single source of truth)
+src/convert.ts           conversion engine: parsing, converting, temperature/Δ, precision, errors
+src/index.ts             DSH plugin entry (server/CLI side): registers the convert tool
+src/client/              Web client plugin (browser side):
+                           index.tsx          registers the conversation.view entry
+                           UnitConvertView.tsx  converter panel (pure front-end core)
+                           locales.ts         zh/en UI copy
+scripts/build-client.mjs esbuild wrapper that emits lib/client.js (ModuleLoader lazy-CJS format)
+test/                    Vitest tests (incl. lib/client.js smoke tests)
+cordis.patch.yml         DSH bundle patch layer
+lib/                     build output (committed so GitHub installs need no build)
 ```
+
+`src/convert.ts` + `src/units.ts` form the host-independent core library: the
+server tool imports it, and the same code is bundled into the browser-side
+`lib/client.js`, so conversions in the Web view happen entirely locally.
 
 ## License
 

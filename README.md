@@ -12,6 +12,7 @@
 - ✅ 纯 TypeScript 实现、零运行时依赖、无副作用，可单测
 - ✅ 结果默认保留约 10 位有效数字，避免浮点噪声
 - ✅ 非法单位 / 跨类换算返回明确错误，便于模型自我纠正
+- ✅ 提供 **Web 交互界面**：「单位换算」视图与「对话」「轨迹」并列显示在会话正文的标签栏中（v0.1.0 起，需 DeepSeek Harness 0.1.0-rc.6+ 的 Web GUI）
 
 ## 支持的类别与单位
 
@@ -43,6 +44,19 @@ dsh plugin --profile <profile名> add github:runcat-tommy/dsh-unit-conversion
 ```
 
 `package.json` 中声明了 `dsh.bundle`，因此 `dsh plugin add` 会自动把它加入 profile 的 bundle 列表并激活 `cordis.patch.yml` 中定义的插件行。
+
+> 该插件同时提供浏览器端（client）部分：`dsh.client` 声明 + `exports["./client"]` 的 `lib/client.js`。安装到带 Web GUI 的 profile 后，会话视图顶部会出现「单位换算」标签页（见下文 **Web 换算视图**）。若在非 GUI（纯命令行）profile 中安装，客户端部分不会被加载，不影响工具功能。
+
+## Web 换算视图（v0.1.0+）
+
+安装并重启 DSH（`dsh web` 等 GUI 进程）后，打开任意会话，在视图标签栏中「对话 / 轨迹」旁边即可看到新增的 **「单位换算」** 标签（支持中英文界面，英文界面显示 "Unit Converter"）：
+
+- 输入**数值**与**源单位/目标单位**（支持符号、英文、中文写法），实时显示换算结果与类别；
+- 支持一键 **⇄ 交换** 源/目标单位；
+- 输入框带全部单位的自动补全建议；
+- 最近的换算记录保存在浏览器本地（localStorage），点击记录即可回填复用，可一键清空；
+- 温度换算同样支持绝对温标（`°C → °F`）与温差（`Δ°C → Δ°F`）两种写法；
+- 视图为**纯前端实现**：换算核心被打包进 `lib/client.js`，换算过程不经过模型或服务器。
 
 ## 使用方法
 
@@ -120,21 +134,28 @@ convertDetailed(3, '公里/小时', 'm/s')   // { result: 0.833..., summary: '..
 
 ```bash
 npm install
-npm test          # vitest 全量测试（含各类换算、别名、温度、边界、插件注册）
+npm test          # vitest 全量测试（含各类换算、别名、温度、边界、插件注册、client 冒烟）
 npm run typecheck # tsc --noEmit
-npm run build     # tsup 构建 lib/（ESM + CJS + d.ts，构建产物随仓库提交以便 git 安装）
+npm run build     # tsup 构建 lib/（ESM+CJS+d.ts），随后 scripts/build-client.mjs 产出 lib/client.js
 ```
 
 ## 仓库结构
 
 ```
-src/units.ts     单位表与别名索引（唯一事实来源）
-src/convert.ts   换算引擎：解析、换算、温度/温差、精度、错误
-src/index.ts     DSH 插件入口：注册 convert 工具
-test/            Vitest 测试
-cordis.patch.yml DSH bundle 补丁层
-lib/             tsup 构建产物（随仓库提交，便于 GitHub 直接安装）
+src/units.ts             单位表与别名索引（唯一事实来源）
+src/convert.ts           换算引擎：解析、换算、温度/温差、精度、错误
+src/index.ts             DSH 插件入口（服务端/CLI 侧）：注册 convert 工具
+src/client/              Web 客户端插件（浏览器侧）：
+                           index.tsx          注册 conversation.view 视图条目
+                           UnitConvertView.tsx  换算面板组件（纯前端核心）
+                           locales.ts         中/英界面文案
+scripts/build-client.mjs esbuild 打包 lib/client.js（ModuleLoader lazy-CJS 格式）
+test/                    Vitest 测试（含 lib/client.js 冒烟测试）
+cordis.patch.yml         DSH bundle 补丁层
+lib/                     构建产物（随仓库提交，便于 GitHub 直接安装）
 ```
+
+`src/convert.ts` + `src/units.ts` 是无宿主依赖的核心库：既被服务端工具使用，也会被打包进浏览器端 `lib/client.js`（换算完全在浏览器本地完成）。
 
 ## 许可证
 
