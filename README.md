@@ -1,6 +1,6 @@
 # dsh-unitverse · 单位换算
 
-[English](README.en.md) | 中文
+[English](README.en.md) | 中文 · [更新日志](CHANGELOG.md)
 
 > 名字来自 **unit + universe**：把十类单位收进同一个"单位宇宙"。视图标签仍叫「**单位换算**」，模型调用的工具仍是 `convert`。
 

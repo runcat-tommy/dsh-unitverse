@@ -1,6 +1,6 @@
 # dsh-unitverse · Unit Converter
 
-English | [中文](README.md)
+English | [中文](README.md) · [Changelog](CHANGELOG.en.md)
 
 > The name reads **unit + universe**: ten categories of units in one universe.
 > The GUI view tab is still called **单位换算 / Unit Converter**, and the
