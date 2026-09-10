@@ -1,6 +1,6 @@
 {
   "name": "dsh-unitverse",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "DSH plugin: universal unit conversion across length, area, volume, time, angle, speed, temperature, pressure, energy and power, with Chinese/English aliases. 单位换算 DSH 插件（长度/面积/体积/时间/角度/速度/温度/压力/热量/功率，支持中英文单位名）。",
   "keywords": [
     "dsh",
@@ -66,6 +66,14 @@
         "@deepseek-ai/dsh-client-ui-slots",
         "@deepseek-ai/dsh-client-ui-conversation"
       ]
+    },
+    "marketplace": {
+      "profiles": [
+        "web"
+      ],
+      "requiresBuildApproval": false,
+      "requiresRestart": true,
+      "manualSteps": false
     }
   },
   "peerDependencies": {

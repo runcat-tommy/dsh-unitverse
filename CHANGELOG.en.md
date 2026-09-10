@@ -2,6 +2,17 @@
 
 This project follows [Semantic Versioning](https://semver.org/). Chinese version: [CHANGELOG.md](CHANGELOG.md).
 
+## [1.1.1] - 2026-09-10
+
+### Added
+
+- Added the `dsh.marketplace` declaration to `package.json` (`profiles: ["web"]`, `requiresBuildApproval: false`, `requiresRestart: true`, `manualSteps: false`). The field was missing while every sibling plugin already declared it: community market registries read it to decide which profiles a plugin maps to and whether installing it needs build approval, a restart or manual steps. The values match the plugin's real behaviour — runtime artifacts are committed and there are no `preinstall` / `install` / `postinstall` / `prepare` lifecycle scripts, so no build approval is needed; the plugin ships a web client, which the registry rule maps to `web` only; the host-side tool needs a restart to take effect; installation has no manual steps.
+
+### Release
+
+- npm: `dsh-unitverse@1.1.1`
+- GitHub: https://github.com/runcat-tommy/dsh-unitverse
+
 ## [1.1.0] - 2026-09-10
 
 The web converter view kept working, but the model-facing `convert` tool **rejected every single call** since 0.1.0 because of host output validation. This release fixes that blocking defect and repairs the temperature-difference (Δ) output and error text.

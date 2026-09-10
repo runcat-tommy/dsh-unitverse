@@ -2,6 +2,17 @@
 
 本项目遵循[语义化版本](https://semver.org/lang/zh-CN/)。英文版见 [CHANGELOG.en.md](CHANGELOG.en.md)。
 
+## [1.1.1] - 2026-09-10
+
+### 新增
+
+- `package.json` 补上 `dsh.marketplace` 市场声明（`profiles: ["web"]`、`requiresBuildApproval: false`、`requiresRestart: true`、`manualSteps: false`）。此前该字段缺失，而其余同类插件均已声明：它供社区市场 Registry 判断插件可映射到哪些 Profile、安装是否需要构建授权 / 重启 / 手工步骤。字段取值与插件实际行为一致——运行产物已随仓库提交、无 `preinstall`/`install`/`postinstall`/`prepare` 生命周期脚本，故无需构建授权；插件带 Web client，按 Registry 规则只映射到 `web`；宿主侧工具需重启生效；安装无手工步骤。
+
+### 发布
+
+- npm：`dsh-unitverse@1.1.1`
+- GitHub：https://github.com/runcat-tommy/dsh-unitverse
+
 ## [1.1.0] - 2026-09-10
 
 Web 换算视图一直可用，但模型调用的 `convert` 工具自 0.1.0 起**每次调用都会被宿主校验拒绝**——本次修复该致命问题，并修正温度温差（Δ）的输出与报错。
