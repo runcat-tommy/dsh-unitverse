@@ -55,9 +55,12 @@ Chinese name** as aliases — e.g. `ft`, `foot`, `feet` and `英尺` are the sam
 
 ## Installation
 
-Install it as a DSH bundle (local checkout, tarball or GitHub all work):
+Install it as a DSH bundle — published on npm as `dsh-unitverse`; a local checkout, a tarball or GitHub work too:
 
 ```bash
+# From npm (recommended)
+dsh plugin --profile <profile-name> add dsh-unitverse
+
 # From a local checkout
 dsh plugin --profile <profile-name> add ./dsh-unitverse
 

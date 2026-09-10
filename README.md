@@ -45,10 +45,13 @@
 
 ## 安装
 
-作为 DSH bundle 安装（本地目录、tarball 或 GitHub 均支持）：
+已发布到 npm（`dsh-unitverse`），本地目录、tarball 与 GitHub 安装同样支持：
 
 ```bash
-# 从本地 checkout 安装
+# 从 npm 安装（推荐）
+dsh plugin --profile <profile名> add dsh-unitverse
+
+# 或从本地 checkout 安装
 dsh plugin --profile <profile名> add ./dsh-unitverse
 
 # 或从 GitHub 安装（构建产物随仓库提供，无需 allowBuilds）
