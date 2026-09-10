@@ -11,6 +11,16 @@ across **length, area, volume, time, angle, speed, temperature, pressure,
 energy/heat and power**, with case-insensitive English and Chinese unit names,
 plus both absolute-temperature and temperature-difference (Δ) modes.
 
+## Preview
+
+English UI — one independent module per category, listing only that category's units:
+
+![Unit Converter view (English UI)](assets/preview-en.jpg)
+
+Chinese UI — all copy, category names and unit names in Chinese:
+
+![单位换算视图（中文界面）](assets/preview-zh.jpg)
+
 ## Features
 
 - ✅ 10 categories, 80+ common units (metric, imperial/US customary, common Chinese units)
