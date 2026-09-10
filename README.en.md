@@ -55,27 +55,60 @@ Chinese name** as aliases — e.g. `ft`, `foot`, `feet` and `英尺` are the sam
 
 ## Installation
 
-Install it as a DSH bundle — published on npm as `dsh-unitverse`; a local checkout, a tarball or GitHub work too:
+`dsh-unitverse` is published on npm and can also be installed from GitHub, a local
+directory or a tarball. **Pick any one of the four options below** — replace
+`<profile-name>` with your profile (e.g. `web`).
+
+### Option 1: From npm (recommended)
+
+The simplest route, with clear version semantics; works with any profile:
 
 ```bash
-# From npm (recommended)
 dsh plugin --profile <profile-name> add dsh-unitverse
+```
 
-# From a local checkout
-dsh plugin --profile <profile-name> add ./dsh-unitverse
+### Option 2: From GitHub
 
-# Or from GitHub (build artifacts are committed, so no allowBuilds needed)
+Use this to follow the repository source directly (the build artifacts in `lib/`
+are committed):
+
+```bash
 dsh plugin --profile <profile-name> add github:runcat-tommy/dsh-unitverse
 ```
 
-`package.json` declares `dsh.bundle`, so `dsh plugin add` registers the plugin
-row from `cordis.patch.yml` automatically.
+> Because the runtime artifacts are committed, this route needs **no**
+> `--allow-build` approval.
 
-> The package also ships a browser half: the `dsh.client` declaration plus
-> `lib/client.js` behind the `exports["./client"]` entry. Installed into a
-> profile that runs the Web GUI, a "Unit Converter" tab appears in the session
-> view bar (see **Web converter view** below). In CLI-only profiles the client
-> part is simply never loaded and the tool keeps working.
+### Option 3: From a local directory
+
+Handy when you want to test local edits immediately, or keep the profile linked
+to your checkout:
+
+```bash
+dsh plugin --profile <profile-name> add ./dsh-unitverse
+```
+
+### Option 4: From a tarball
+
+For offline / air-gapped environments, or to pin an already-packed artifact:
+
+```bash
+npm pack                                                          # produces dsh-unitverse-<version>.tgz
+dsh plugin --profile <profile-name> add ./dsh-unitverse-<version>.tgz
+```
+
+### After installing
+
+- **No manual config edits**: `package.json` declares `dsh.bundle`, so `dsh plugin add`
+  registers the plugin in the profile's bundle list and activates the plugin row
+  defined in `cordis.patch.yml`.
+- **Restart DSH** for it to take effect: once the GUI process (`dsh web` etc.)
+  restarts, the model can call the `convert` tool.
+- **Web UI**: the package also ships a browser half — the `dsh.client` declaration
+  plus `lib/client.js` behind the `exports["./client"]` entry. In a profile that runs
+  the Web GUI, a "Unit Converter" tab appears in the session view tab bar (see
+  **Web converter view** below); in CLI-only profiles the client part is simply never
+  loaded and the tool keeps working.
 
 ## Web converter view (v0.1.0+)
 

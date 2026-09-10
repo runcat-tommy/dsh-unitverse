@@ -45,22 +45,48 @@
 
 ## 安装
 
-已发布到 npm（`dsh-unitverse`），本地目录、tarball 与 GitHub 安装同样支持：
+`dsh-unitverse` 已发布到 npm，也支持从 GitHub、本地目录或 tarball 安装。**以下四种方式任选其一**，把 `<profile名>` 换成你的 profile（如 `web`）即可。
+
+### 方式一：从 npm 安装（推荐）
+
+最省事、版本语义清晰，可装进任意 profile：
 
 ```bash
-# 从 npm 安装（推荐）
 dsh plugin --profile <profile名> add dsh-unitverse
+```
 
-# 或从本地 checkout 安装
-dsh plugin --profile <profile名> add ./dsh-unitverse
+### 方式二：从 GitHub 安装
 
-# 或从 GitHub 安装（构建产物随仓库提供，无需 allowBuilds）
+想直接跟随仓库源码时使用（构建产物 `lib/` 已随仓库提交）：
+
+```bash
 dsh plugin --profile <profile名> add github:runcat-tommy/dsh-unitverse
 ```
 
-`package.json` 中声明了 `dsh.bundle`，因此 `dsh plugin add` 会自动把它加入 profile 的 bundle 列表并激活 `cordis.patch.yml` 中定义的插件行。
+> 因运行产物已提交，这种方式**不需要** `--allow-build` 构建授权。
 
-> 该插件同时提供浏览器端（client）部分：`dsh.client` 声明 + `exports["./client"]` 的 `lib/client.js`。安装到带 Web GUI 的 profile 后，会话视图顶部会出现「单位换算」标签页（见下文 **Web 换算视图**）。若在非 GUI（纯命令行）profile 中安装，客户端部分不会被加载，不影响工具功能。
+### 方式三：从本地目录安装
+
+适合改了代码立刻验证，或想让 profile 以 `link` 方式跟随本地改动：
+
+```bash
+dsh plugin --profile <profile名> add ./dsh-unitverse
+```
+
+### 方式四：从 tarball 安装
+
+适合离线 / 内网环境，或想固定某个已打包的产物：
+
+```bash
+npm pack                                                     # 生成 dsh-unitverse-<版本>.tgz（如 dsh-unitverse-1.1.1.tgz）
+dsh plugin --profile <profile名> add ./dsh-unitverse-<版本>.tgz
+```
+
+### 安装之后
+
+- **无需手工改配置**：`package.json` 声明了 `dsh.bundle`，`dsh plugin add` 会自动把插件加入 profile 的 bundle 列表，并激活 `cordis.patch.yml` 中定义的插件行。
+- **重启 DSH 后生效**：重启 `dsh web` 等 GUI 进程后，模型侧即可调用 `convert` 工具。
+- **Web 界面**：该插件同时提供浏览器端（client）部分：`dsh.client` 声明 + `exports["./client"]` 的 `lib/client.js`。安装到带 Web GUI 的 profile 后，会话视图标签栏会出现「单位换算」标签页（见下文 **Web 换算视图**）；若装在非 GUI（纯命令行）profile 中，客户端部分不会被加载，不影响工具功能。
 
 ## Web 换算视图（v0.1.0+）
 
