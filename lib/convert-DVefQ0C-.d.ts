@@ -103,7 +103,7 @@ interface ResolvedUnit {
     def: UnitDef;
     /** Whether the caller asked for a temperature *difference* (Δ) conversion. */
     delta: boolean;
-    /** Canonical spellings resolved from the input, e.g. `千米`. */
+    /** Canonical spelling resolved from the input, e.g. `千米`; keeps any leading Δ marker. */
     canonical: string;
 }
 /** A validated conversion request after both units parsed. */
@@ -168,7 +168,7 @@ declare function convertRaw(value: number, from: ResolvedUnit, to: ResolvedUnit)
  * ```ts
  * convert(100, 'km', 'mi')          // 62.13711922
  * convert(25, '°C', '°F')           // 77
- * convert(1, 'Δ°C', '°F')           // 1.8  (temperature difference)
+ * convert(1, 'Δ°C', 'Δ°F')          // 1.8  (temperature difference; both tokens need Δ)
  * convert(3, '公里/小时', 'm/s')    // 0.8333333333
  * ```
  *

@@ -28,7 +28,7 @@ export interface ResolvedUnit {
   def: UnitDef
   /** Whether the caller asked for a temperature *difference* (Δ) conversion. */
   delta: boolean
-  /** Canonical spellings resolved from the input, e.g. `千米`. */
+  /** Canonical spelling resolved from the input, e.g. `千米`; keeps any leading Δ marker. */
   canonical: string
 }
 
@@ -96,7 +96,7 @@ export function resolveUnit(token: string): ResolvedUnit {
   if (def === undefined) {
     throw new UnitConversionError(
       'unknown-unit',
-      `unknown unit "${base}": it is not a recognized length/area/volume/time/angle/speed/temperature/pressure/energy/power unit. `,
+      `unknown unit "${base}": it is not a recognized length/area/volume/time/angle/speed/temperature/pressure/energy/power unit.`,
       base,
     )
   }
@@ -107,7 +107,8 @@ export function resolveUnit(token: string): ResolvedUnit {
       token,
     )
   }
-  return { def, delta, canonical: displayNameFor(def, base) }
+  const canonical = `${delta ? 'Δ' : ''}${displayNameFor(def, base)}`
+  return { def, delta, canonical }
 }
 
 /** Validate a finite numeric value. */
@@ -132,9 +133,14 @@ export function parseRequest(value: number, from: string, to: string): ConvertRe
     )
   }
   if (fromResolved.delta !== toResolved.delta) {
+    // Name both repairs: the caller either meant a difference (add Δ to the
+    // absolute side) or an absolute reading (drop the Δ). Prefix `Δ` only to
+    // the side that lacks it, never to the token that already carries one.
+    const bothDelta = `Δ${fromResolved.def.symbol}, Δ${toResolved.def.symbol}`
+    const bothAbsolute = `${fromResolved.def.symbol}, ${toResolved.def.symbol}`
     throw new UnitConversionError(
       'mixed-delta',
-      `cannot mix absolute and Δ temperature units: use ${fromResolved.delta ? 'Δ' : ''}${from} and ${toResolved.delta ? 'Δ' : ''}${to} consistently.`,
+      `cannot mix absolute and Δ temperature units: use both with the Δ marker (${bothDelta}) or both absolute (${bothAbsolute}) consistently.`,
     )
   }
   return { value, from: fromResolved, to: toResolved }
@@ -182,7 +188,7 @@ export function convertRaw(value: number, from: ResolvedUnit, to: ResolvedUnit):
  * ```ts
  * convert(100, 'km', 'mi')          // 62.13711922
  * convert(25, '°C', '°F')           // 77
- * convert(1, 'Δ°C', '°F')           // 1.8  (temperature difference)
+ * convert(1, 'Δ°C', 'Δ°F')          // 1.8  (temperature difference; both tokens need Δ)
  * convert(3, '公里/小时', 'm/s')    // 0.8333333333
  * ```
  *

@@ -2,6 +2,32 @@
 
 本项目遵循[语义化版本](https://semver.org/lang/zh-CN/)。英文版见 [CHANGELOG.en.md](CHANGELOG.en.md)。
 
+## [1.1.0] - 2026-09-10
+
+Web 换算视图一直可用，但模型调用的 `convert` 工具自 0.1.0 起**每次调用都会被宿主校验拒绝**——本次修复该致命问题，并修正温度温差（Δ）的输出与报错。
+
+### 修复
+
+- **`convert` 工具完全无法调用**：输出 schema 只声明了 7 个字段，而引擎实际返回 10 个（另含 `categoryEn`、`fromInput`、`toInput`），在 `additionalProperties: false` 下每次调用都被宿主以 "returned invalid output" 拒绝。现已补齐这三个字段声明，保留调用方原始拼写的回显。
+- **温差结果的 `summary` 丢掉了 Δ**：`10 Δ°C → Δ°F` 曾显示为 `10 °C = 18 °F`，读起来是一个绝对温标等式（绝对的 `10 °C` 应为 `50 °F`）。现在回显单位与 `summary` 均保留 Δ 标记：`10 Δ°C = 18 Δ°F (温度)`。
+- **绝对/Δ 混用的报错会把 Δ 叠成 `ΔΔ`**：`Δ°C → K` 曾提示 `use ΔΔ°C and K consistently`（`ΔΔ°C` 不是合法单位），且只给出一种修法。现改为只给缺 Δ 的一侧补 Δ，并同时列出两种修法：`use both with the Δ marker (Δ°C, ΔK) or both absolute (°C, K)`。
+- 未知单位报错文案末尾多余的尾随空格。
+- 核心库 JSDoc 中过时的温差示例 `convert(1, 'Δ°C', '°F')` 已改为 `convert(1, 'Δ°C', 'Δ°F')`——原示例的调用实际会被 `mixed-delta` 拒绝，而该注释会随 `lib/*.d.ts` 一起发布，会把错误示例带给库使用者。
+
+### 变更
+
+- 温差换算回显的单位名现在带 `Δ` 前缀（`from` / `to` 字段与 `summary`），据此可区分温差与绝对温标读数。Web 界面不受影响（界面自行拼接显示串，不读 `summary`）。
+- 测试由 88 条增至 92 条：新增"输出 schema 与返回值键集一致"的回归断言（防止"少声明字段导致工具不可调用"再次发生），以及温差回显、报错不叠 Δ 的专项断言。
+
+### 文档
+
+- `README.md` / `README.en.md`：补全 `convert` 返回结构（10 个字段），说明温差回显保留 Δ 标记及两种修法提示。
+
+### 发布
+
+- npm：`dsh-unitverse@1.1.0`
+- GitHub：https://github.com/runcat-tommy/dsh-unitverse
+
 ## [0.1.0] - 2026-09-10
 
 首次发布。

@@ -57,6 +57,27 @@ describe('plugin entry', () => {
     expect(blocks[0]).toEqual({ type: 'text', text: result.summary })
   })
 
+  it('declares every key that execute() returns in the output schema', async () => {
+    const { ctx, register } = makeCtx()
+    apply(ctx)
+    const def = register.mock.calls[0]![0] as ToolDef
+    const schema = def.output.schema as {
+      additionalProperties?: boolean
+      properties: Record<string, unknown>
+      required?: string[]
+    }
+    const value = await def.execute({ value: 100, from: 'km', to: 'mi' })
+
+    // `additionalProperties: false` makes the host reject any returned key the
+    // schema does not declare, so schema and result must stay in lockstep.
+    expect(schema.additionalProperties).toBe(false)
+    const declared = Object.keys(schema.properties).sort()
+    const returned = Object.keys(value).sort()
+    expect(returned.filter((key) => !declared.includes(key))).toEqual([])
+    expect(declared).toEqual(returned)
+    expect(schema.required?.slice().sort()).toEqual(declared)
+  })
+
   it('supports Chinese units through the tool definition', async () => {
     const { ctx, register } = makeCtx()
     apply(ctx)

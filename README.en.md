@@ -125,7 +125,7 @@ Tool parameters:
 | `from` | string | yes | Source unit: symbol / English / Chinese, case-insensitive |
 | `to` | string | yes | Target unit: symbol / English / Chinese, case-insensitive |
 
-Returns a structured result: `{ value, from, to, result, category, categoryZh, summary }`.
+Returns a structured result: `{ value, from, to, result, category, categoryZh, categoryEn, fromInput, toInput, summary }` (`fromInput` / `toInput` are the caller's original tokens; `from` / `to` are the resolved canonical names).
 
 ### Examples
 
@@ -152,7 +152,14 @@ Temperature converts as an **absolute scale** by default. For a temperature
 ```
 
 Mixing an absolute and a Δ unit (e.g. `Δ°C` → `K`) is rejected to avoid
-ambiguous "degrees Kelvin"-style semantics.
+ambiguous "degrees Kelvin"-style semantics; the error names both repairs (add Δ
+to both, or drop it from both). Delta results keep the Δ marker in the echoed
+units, so an interval is never mistaken for an absolute reading:
+
+```
+convert(10, "Δ°C", "Δ°F") → summary: "10 Δ°C = 18 Δ°F (温度)"
+convert(10, "°C", "°F")   → summary: "10 °C = 50 °F (温度)"   ← absolute, a different result
+```
 
 ## Precision and conventions
 

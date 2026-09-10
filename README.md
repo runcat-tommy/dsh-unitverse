@@ -91,7 +91,7 @@ convert(value=100, from="km", to="mi")   -> 62.13711922 mi
 | `from` | string | 是 | 源单位：符号 / 英文 / 中文，大小写不敏感 |
 | `to` | string | 是 | 目标单位：符号 / 英文 / 中文，大小写不敏感 |
 
-返回结构化结果：`{ value, from, to, result, category, categoryZh, summary }`。
+返回结构化结果：`{ value, from, to, result, category, categoryZh, categoryEn, fromInput, toInput, summary }`（`fromInput` / `toInput` 为调用方原始传入的单位写法，`from` / `to` 为解析后的规范名）。
 
 ### 示例（模型会话）
 
@@ -121,7 +121,12 @@ convert(value=100, from="km", to="mi")   -> 62.13711922 mi
 → convert(1, "Δ°C", "Δ°F") → 1.8
 ```
 
-绝对温标与 Δ 温差不可混用（例如 `Δ°C` → `K` 会被拒绝），以避免"开氏度"式的歧义。
+绝对温标与 Δ 温差不可混用（例如 `Δ°C` → `K` 会被拒绝），报错会同时给出两种修法（都加 Δ 或都去掉 Δ）。温差换算的回显会**保留 Δ 标记**，以免把温差误读成绝对温标：
+
+```
+convert(10, "Δ°C", "Δ°F") → summary: "10 Δ°C = 18 Δ°F (温度)"
+convert(10, "°C", "°F")   → summary: "10 °C = 50 °F (温度)"   ← 绝对温标，不是同一个结果
+```
 
 ## 精度与约定
 

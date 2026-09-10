@@ -129,6 +129,27 @@ describe('same-category guard and identity', () => {
 
   it('rejects mixing absolute and Δ temperature tokens', () => {
     expect(() => convert(1, 'Δ°C', 'K')).toThrowError(/consistently/)
+    expect(() => convert(1, 'K', 'Δ°C')).toThrowError(UnitConversionError)
+  })
+
+  it('suggests both repaired spellings without doubling the Δ marker', () => {
+    const messageFor = (from: string, to: string): string => {
+      try {
+        convert(1, from, to)
+      } catch (error) {
+        return (error as Error).message
+      }
+      throw new Error(`expected ${from} -> ${to} to be rejected`)
+    }
+
+    const forward = messageFor('Δ°C', 'K')
+    expect(forward).not.toContain('ΔΔ')
+    expect(forward).toContain('Δ°C, ΔK')
+    expect(forward).toContain('°C, K')
+
+    const backward = messageFor('K', 'Δ°C')
+    expect(backward).not.toContain('ΔΔ')
+    expect(backward).toContain('ΔK, Δ°C')
   })
 })
 
@@ -170,5 +191,25 @@ describe('convertDetailed summary', () => {
     expect(r.summary).toContain('时间')
     expect(r.from).toBe('h')
     expect(r.to).toBe('s')
+  })
+
+  it('keeps the Δ marker in the echoed units and the summary', () => {
+    const delta = convertDetailed(10, 'Δ°C', 'Δ°F')
+    expect(delta.result).toBeCloseTo(18)
+    expect(delta.from).toBe('Δ°C')
+    expect(delta.to).toBe('Δ°F')
+    expect(delta.summary).toBe('10 Δ°C = 18 Δ°F (温度)')
+  })
+
+  it('never states a delta reading as an absolute one', () => {
+    const absolute = convertDetailed(10, '°C', '°F')
+    expect(absolute.result).toBe(50)
+    expect(absolute.summary).toBe('10 °C = 50 °F (温度)')
+    expect(convertDetailed(10, 'Δ°C', 'Δ°F').summary).not.toBe(absolute.summary)
+  })
+
+  it('echoes the Δ marker for Chinese and delta-word spellings', () => {
+    expect(convertDetailed(1, 'Δ摄氏度', 'Δ华氏度').from).toBe('Δ摄氏度')
+    expect(convertDetailed(1, 'deltaC', 'deltaF').to).toBe('Δ°F')
   })
 })

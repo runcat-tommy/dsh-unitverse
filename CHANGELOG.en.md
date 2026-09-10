@@ -2,6 +2,32 @@
 
 This project follows [Semantic Versioning](https://semver.org/). Chinese version: [CHANGELOG.md](CHANGELOG.md).
 
+## [1.1.0] - 2026-09-10
+
+The web converter view kept working, but the model-facing `convert` tool **rejected every single call** since 0.1.0 because of host output validation. This release fixes that blocking defect and repairs the temperature-difference (Δ) output and error text.
+
+### Fixed
+
+- **The `convert` tool could not be called at all**: the output schema declared only 7 properties while the engine returned 10 (it also returns `categoryEn`, `fromInput`, `toInput`), so under `additionalProperties: false` every call was rejected by the host with "returned invalid output". All three properties are now declared, keeping the caller's original spelling in the echo.
+- **The Δ marker was dropped from a difference `summary`**: `10 Δ°C → Δ°F` used to read `10 °C = 18 °F`, i.e. it looked like an absolute-scale equality (the absolute `10 °C` is `50 °F`). Echoed units and `summary` now keep the marker: `10 Δ°C = 18 Δ°F (温度)`.
+- **The absolute/Δ mismatch error doubled the marker into `ΔΔ`**: `Δ°C → K` used to suggest `use ΔΔ°C and K consistently` (`ΔΔ°C` is not a valid unit) and offered only one repair. It now prefixes `Δ` only to the side that lacks it and names both repairs: `use both with the Δ marker (Δ°C, ΔK) or both absolute (°C, K)`.
+- Stray trailing space in the unknown-unit error message.
+- Stale delta example in the core JSDoc, `convert(1, 'Δ°C', '°F')` → `convert(1, 'Δ°C', 'Δ°F')`. The original call is rejected as `mixed-delta`, and the comment ships inside `lib/*.d.ts`, so it handed library consumers a wrong example.
+
+### Changed
+
+- Echoed unit names for a difference conversion now carry the `Δ` prefix (`from` / `to` fields and `summary`), which tells an interval apart from an absolute reading. The web view is unaffected — it builds its own display strings and never reads `summary`.
+- Tests grew from 88 to 92: a regression assertion that the output schema and the returned key set stay identical (so a missing declaration can never silently break the tool again), plus dedicated assertions for the delta echo and the non-doubled error hint.
+
+### Docs
+
+- `README.md` / `README.en.md`: document the full `convert` result shape (10 fields) and the delta echo / dual-repair error behaviour.
+
+### Release
+
+- npm: `dsh-unitverse@1.1.0`
+- GitHub: https://github.com/runcat-tommy/dsh-unitverse
+
 ## [0.1.0] - 2026-09-10
 
 First release.

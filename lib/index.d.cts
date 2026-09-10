@@ -1,5 +1,5 @@
 import { Context } from '@deepseek-ai/cordis';
-export { A as ALIAS_INDEX, a as AliasIndex, C as CATEGORIES, b as CATEGORY_ORDER, c as CategoryId, d as CategoryMeta, e as ConvertOptions, f as ConvertRequest, g as ConvertResult, D as DELTA_MARKERS, R as ResolvedUnit, U as UNITS, h as UnitConversionError, i as UnitDef, j as buildAliasIndex, k as convert, l as convertDetailed, m as convertRaw, n as findUnit, o as normalizeUnit, p as parseRequest, r as resolveUnit, q as roundSignificant, s as stripDeltaMarker, u as unitsByCategory } from './convert-D6txqQbW.cjs';
+export { A as ALIAS_INDEX, a as AliasIndex, C as CATEGORIES, b as CATEGORY_ORDER, c as CategoryId, d as CategoryMeta, e as ConvertOptions, f as ConvertRequest, g as ConvertResult, D as DELTA_MARKERS, R as ResolvedUnit, U as UNITS, h as UnitConversionError, i as UnitDef, j as buildAliasIndex, k as convert, l as convertDetailed, m as convertRaw, n as findUnit, o as normalizeUnit, p as parseRequest, r as resolveUnit, q as roundSignificant, s as stripDeltaMarker, u as unitsByCategory } from './convert-DVefQ0C-.cjs';
 
 /**
  * dsh-unitverse — DeepSeek Harness plugin entry.
