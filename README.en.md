@@ -16,7 +16,10 @@ plus both absolute-temperature and temperature-difference (Δ) modes.
 - ✅ Results rounded to ~10 significant digits by default
 - ✅ Clear errors for unknown units or cross-category requests
 - ✅ **Web UI view**: a "Unit Converter" tab next to Conversation / Trajectory
-  in the session view bar (since v0.1.0, requires the DSH Web GUI, 0.1.0-rc.6+)
+  in the session view bar; the panel is split into ten independent category
+  modules (units are never mixed), and all copy — **unit names included** —
+  follows the DSH zh/en UI language (since v0.1.0, requires the DSH Web GUI,
+  0.1.0-rc.6+)
 
 ## Supported categories and units
 
@@ -61,16 +64,30 @@ row from `cordis.patch.yml` automatically.
 
 After installing and restarting the DSH GUI process (`dsh web` etc.), open any
 session: the view tab bar now shows **"Unit Converter"** next to Conversation /
-Trajectory (locale-aware; the Chinese UI shows 单位换算):
+Trajectory (the Chinese UI shows 单位换算):
 
-- Type a **value** plus **source / target units** (symbol, English or Chinese
-  spelling) — the result and its category appear instantly;
-- One-click **⇄ swap** of source and target;
-- Autocomplete suggestions for every supported unit;
-- Recent conversions persist in browser localStorage; click any history row to
-  restore it, or clear the list with one click;
-- Temperature supports absolute scales (`°C → °F`) as well as differences
-  (`Δ°C → Δ°F`);
+- **One module per category**: the panel opens with ten category tabs — Length,
+  Area, Volume, Time, Angle, Speed, Temperature, Pressure, Heat / Energy and
+  Power. Switching a tab switches the module, and a module **only ever lists its
+  own units**, so units from different categories are never mixed and a
+  cross-category conversion cannot be produced. Each module starts from a common
+  unit pair (e.g. Length → km ↔ mi).
+- **Unit dropdowns**: source and target units are picked from a list showing
+  `symbol · name` — no unit name has to be typed, so nothing can be misspelled.
+- **Instant result**: typing a value updates the result immediately, shown as a
+  large number + unit, the full equation and a category badge, with one-click
+  **copy**.
+- One-click **⇄ swap** of source and target.
+- The **Temperature** module adds a **Difference Δ** switch: off converts
+  absolute scales (`°C → °F`), on converts intervals (`Δ°C → Δ°F`), with an
+  explanatory hint.
+- **Recent conversions are kept per category** (browser localStorage); click any
+  row to restore it, or clear the current category’s rows in one click.
+- **Fully follows the DSH UI language**: in a Chinese environment every string —
+  including **unit names** such as 千米 / 摄氏度 — is Chinese; in an English
+  environment everything is English ("kilometer", "degree Celsius"), category
+  names and tabs included. Switching the language refreshes the panel and the
+  history immediately.
 - The view is **pure front-end**: the conversion core is bundled into
   `lib/client.js`, so conversions run locally in the browser — no model or
   server round-trip involved.

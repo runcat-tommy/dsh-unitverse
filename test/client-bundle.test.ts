@@ -96,6 +96,7 @@ describe.skipIf(!hasBundle())('client bundle (lib/client.js)', () => {
       order?: number
       locale?: string
       label?: () => string
+      inject?: () => { locale?: unknown }
     }
     expect(options).toMatchObject({
       name: 'conversation.view',
@@ -104,6 +105,9 @@ describe.skipIf(!hasBundle())('client bundle (lib/client.js)', () => {
       locale: 'unit-conversion',
     })
     expect(options.label?.()).toBe('t:view.tab')
+    // The locale service is injected so the panel can localize unit/category names.
+    expect(typeof options.inject).toBe('function')
+    expect(options.inject?.().locale).toBe(ctx.locale)
     expect(registerLocale).toHaveBeenCalledWith(
       'unit-conversion',
       expect.objectContaining({ zh: expect.any(Object), en: expect.any(Object) }),

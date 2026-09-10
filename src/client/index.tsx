@@ -34,5 +34,8 @@ export function apply(ctx: Context): void {
       order: VIEW_ORDER,
       locale: NS,
       label: () => t('view.tab'),
+      // The active-locale source is injected so the panel can localize unit and
+      // category names (data owned by units.ts) and re-render on a language switch.
+      inject: () => ({ locale: ctx.locale }),
     }, UnitConvertView))
 }
