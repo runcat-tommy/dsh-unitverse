@@ -1,5 +1,5 @@
 /**
- * Browser-side locale dictionaries for the unit-conversion view.
+ * Browser-side locale dictionaries for the unitverse view.
  *
  * The key set is deliberately a FINITE union: `catTab.${CategoryId}` expands
  * over the literal category ids, so a missing or extra key in either dictionary
@@ -13,7 +13,7 @@
 import type { CategoryId } from '../units'
 
 /** Dictionary namespace owned by this client plugin. */
-export const NS = 'unit-conversion'
+export const NS = 'unitverse'
 
 /** The dictionary key set (source of truth for both locales). */
 export type UnitConversionKey =
@@ -50,8 +50,8 @@ export type UnitConversionKey =
 
 declare module '@deepseek-ai/dsh-client-ui-slots' {
   interface LocaleNamespaceMap {
-    /** The unit-conversion conversation view tab label and panel copy. */
-    'unit-conversion': UnitConversionKey
+    /** The unitverse conversation view tab label and panel copy. */
+    'unitverse': UnitConversionKey
   }
 }
 

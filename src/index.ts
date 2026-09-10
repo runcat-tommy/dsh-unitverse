@@ -1,5 +1,5 @@
 /**
- * dsh-unit-conversion — DeepSeek Harness plugin entry.
+ * dsh-unitverse — DeepSeek Harness plugin entry.
  *
  * A Cordis plugin module (see docs/user/develop/basic) that registers one
  * model-facing tool, `convert`, over the pure engine in `./convert`.
@@ -7,8 +7,8 @@
  * ```yaml
  * # cordis.patch.yml (bundle layer)
  * - insert:
- *     - id: unit-conversion
- *       name: dsh-unit-conversion
+ *     - id: unitverse
+ *       name: dsh-unitverse
  * ```
  */
 
@@ -37,7 +37,7 @@ import {
   type CategoryId,
 } from './units'
 
-export const name = 'unit-conversion'
+export const name = 'unitverse'
 export const inject = ['tools'] as const
 const CATEGORY_PREVIEWS: Record<CategoryId, string> = {
   length: 'm, km, cm, mm, um, nm, in, ft, yd, mi, nmi; 米/千米/英里/英尺/英寸…',
@@ -110,7 +110,7 @@ export function apply(ctx: Context): void {
 
 // Re-export the host-independent core so the same package doubles as a plain
 // conversion library. Consumers who want zero DSH dependencies can import from
-// 'dsh-unit-conversion/convert' instead (see package.json exports).
+// 'dsh-unitverse/convert' instead (see package.json exports).
 export {
   convert,
   convertDetailed,

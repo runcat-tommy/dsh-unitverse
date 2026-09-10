@@ -12,7 +12,7 @@ import { DEFAULTS } from '../src/client/UnitConvertView'
  *  - the temperature module's Δ (difference) defaults convert as intervals.
  */
 
-describe('unit-conversion view copy and modules', () => {
+describe('unitverse view copy and modules', () => {
   it('ships the same key set in zh and en (no half-translated copy)', () => {
     const zhKeys = Object.keys(zh).sort()
     const enKeys = Object.keys(en).sort()
@@ -34,7 +34,7 @@ describe('unit-conversion view copy and modules', () => {
   })
 
   it('declares the dictionary namespace used at registration', () => {
-    expect(NS).toBe('unit-conversion')
+    expect(NS).toBe('unitverse')
   })
 
   it('gives every category a default pair inside that category that converts', () => {

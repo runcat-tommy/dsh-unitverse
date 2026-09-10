@@ -9,9 +9,14 @@
  * Output: lib/client.js (+ lib/client.d.ts hand-written mirror for typing).
  */
 import { build } from 'esbuild'
-import { writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 
-const PACKAGE_ID = 'dsh-unit-conversion'
+/**
+ * The ModuleLoader id must equal the package name: the web runtime maps the
+ * package to `/plugins/<name>/client.js` and materializes the bundle under that
+ * same id. Reading it from package.json keeps the two in sync across renames.
+ */
+const PACKAGE_ID = JSON.parse(readFileSync('package.json', 'utf8')).name
 
 const banner = `window.__ModuleLoader__.load({
 \tid: ${JSON.stringify(PACKAGE_ID)},
@@ -43,11 +48,11 @@ await build({
   logLevel: 'info',
 })
 
-// Minimal static typing for `dsh-unit-conversion/client` consumers.
+// Minimal static typing for `dsh-unitverse/client` consumers.
 writeFileSync(
   'lib/client.d.ts',
   `/**
- * Browser half of dsh-unit-conversion: a DSH client module that registers the
+ * Browser half of dsh-unitverse: a DSH client module that registers the
  * conversation view tab "单位换算 / Unit Converter" (next to 对话 / 轨迹).
  * Loaded by the web runtime through the package \`dsh.client\` declaration;
  * not meant for direct import.

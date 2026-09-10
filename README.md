@@ -1,6 +1,8 @@
-# dsh-unit-conversion · 单位换算
+# dsh-unitverse · 单位换算
 
 [English](README.en.md) | 中文
+
+> 名字来自 **unit + universe**：把十类单位收进同一个"单位宇宙"。视图标签仍叫「**单位换算**」，模型调用的工具仍是 `convert`。
 
 **DeepSeek Harness (DSH) 单位换算插件**：提供 `convert` 工具，在 **长度、面积、体积、时间、角度、速度、温度、压力、热量/能量、功率** 十大类单位之间换算，支持英文符号、英文全称与中文名称，大小写不敏感，内置温度温标与温差（Δ）双模式。
 
@@ -37,10 +39,10 @@
 
 ```bash
 # 从本地 checkout 安装
-dsh plugin --profile <profile名> add ./dsh-unit-conversion
+dsh plugin --profile <profile名> add ./dsh-unitverse
 
 # 或从 GitHub 安装（构建产物随仓库提供，无需 allowBuilds）
-dsh plugin --profile <profile名> add github:runcat-tommy/dsh-unit-conversion
+dsh plugin --profile <profile名> add github:runcat-tommy/dsh-unitverse
 ```
 
 `package.json` 中声明了 `dsh.bundle`，因此 `dsh plugin add` 会自动把它加入 profile 的 bundle 列表并激活 `cordis.patch.yml` 中定义的插件行。
@@ -122,7 +124,7 @@ convert(value=100, from="km", to="mi")   -> 62.13711922 mi
 换算核心是零依赖纯模块，可直接复用：
 
 ```ts
-import { convert, convertDetailed } from 'dsh-unit-conversion'
+import { convert, convertDetailed } from 'dsh-unitverse'
 
 convert(100, 'km', 'mi')                 // 62.13711922
 convert(25, '°C', '°F')                  // 77

@@ -41,7 +41,7 @@ interface HistoryEntry {
   ts: number
 }
 
-const HISTORY_KEY = 'dsh.unit-conversion.history.v2'
+const HISTORY_KEY = 'dsh.unitverse.history.v1'
 const HISTORY_MAX = 60
 const HISTORY_SHOWN = 6
 
@@ -95,7 +95,7 @@ export const DEFAULTS: Record<CategoryId, readonly [string, string]> = {
 
 /* ---------------------------------------------------------------- styling */
 
-const STYLE_ID = 'dsh-unit-conversion-view-css'
+const STYLE_ID = 'dsh-unitverse-view-css'
 
 const CSS = `
 .uc-root {
@@ -275,7 +275,7 @@ function ensureStyle(): void {
   if (document.getElementById(STYLE_ID)) return
   const el = document.createElement('style')
   el.id = STYLE_ID
-  el.setAttribute('data-plugin-css', 'dsh-unit-conversion')
+  el.setAttribute('data-plugin-css', 'dsh-unitverse')
   el.textContent = CSS
   document.head.appendChild(el)
 }

@@ -17,6 +17,15 @@ import { describe, expect, it, vi, afterEach } from 'vitest'
 const require = createRequire(import.meta.url)
 const BUNDLE = new URL('../lib/client.js', import.meta.url)
 
+/**
+ * The ModuleLoader id must equal the package name: the web runtime maps the
+ * package to `/plugins/<name>/client.js` and materializes the bundle under that
+ * same id, so reading it from package.json is the invariant under test.
+ */
+const PACKAGE_NAME = JSON.parse(
+  readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
+).name as string
+
 function hasBundle(): boolean {
   return existsSync(BUNDLE)
 }
@@ -56,7 +65,7 @@ describe.skipIf(!hasBundle())('client bundle (lib/client.js)', () => {
   it('registers itself under the package id and yields inject/apply', () => {
     loadBundle()
     expect(loadConfig).toBeDefined()
-    expect(loadConfig?.id).toBe('dsh-unit-conversion')
+    expect(loadConfig?.id).toBe(PACKAGE_NAME)
     expect(typeof loadConfig?.factory).toBe('function')
 
     const mod = loadConfig!.factory(require)
@@ -65,7 +74,7 @@ describe.skipIf(!hasBundle())('client bundle (lib/client.js)', () => {
     expect(typeof (mod as { apply: unknown }).apply).toBe('function')
   })
 
-  it('apply() registers a conversation.view entry unit-conversion/order 20', () => {
+  it('apply() registers a conversation.view entry unitverse/order 20', () => {
     loadBundle()
     const mod = loadConfig!.factory(require) as {
       apply: (ctx: unknown) => void
@@ -100,16 +109,16 @@ describe.skipIf(!hasBundle())('client bundle (lib/client.js)', () => {
     }
     expect(options).toMatchObject({
       name: 'conversation.view',
-      id: 'unit-conversion',
+      id: 'unitverse',
       order: 20,
-      locale: 'unit-conversion',
+      locale: 'unitverse',
     })
     expect(options.label?.()).toBe('t:view.tab')
     // The locale service is injected so the panel can localize unit/category names.
     expect(typeof options.inject).toBe('function')
     expect(options.inject?.().locale).toBe(ctx.locale)
     expect(registerLocale).toHaveBeenCalledWith(
-      'unit-conversion',
+      'unitverse',
       expect.objectContaining({ zh: expect.any(Object), en: expect.any(Object) }),
     )
   })

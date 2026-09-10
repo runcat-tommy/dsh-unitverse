@@ -1,5 +1,5 @@
 /**
- * Pure conversion engine for dsh-unit-conversion.
+ * Pure conversion engine for dsh-unitverse.
  *
  * This module has no DeepSeek-Harness dependency on purpose: it is a plain
  * TypeScript library that the DSH plugin entry (`src/index.ts`) wraps as a

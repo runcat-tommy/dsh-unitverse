@@ -1,5 +1,5 @@
 /**
- * Browser half of dsh-unit-conversion: a DSH client module that registers the
+ * Browser half of dsh-unitverse: a DSH client module that registers the
  * conversation view tab "单位换算 / Unit Converter" (next to 对话 / 轨迹).
  * Loaded by the web runtime through the package `dsh.client` declaration;
  * not meant for direct import.

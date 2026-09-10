@@ -38,7 +38,7 @@ function render(lang: 'zh' | 'en'): string {
   return renderToStaticMarkup(createElement(UnitConvertView, props))
 }
 
-describe('unit-conversion view rendering', () => {
+describe('unitverse view rendering', () => {
   it('renders the Chinese UI in Chinese, including unit names', () => {
     const html = render('zh')
     expect(html).toContain('单位换算')

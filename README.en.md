@@ -1,6 +1,10 @@
-# dsh-unit-conversion
+# dsh-unitverse · Unit Converter
 
 English | [中文](README.md)
+
+> The name reads **unit + universe**: ten categories of units in one universe.
+> The GUI view tab is still called **单位换算 / Unit Converter**, and the
+> model-facing tool is still `convert`.
 
 A **DeepSeek Harness (DSH) unit conversion plugin** exposing one `convert` tool
 across **length, area, volume, time, angle, speed, temperature, pressure,
@@ -45,10 +49,10 @@ Install it as a DSH bundle (local checkout, tarball or GitHub all work):
 
 ```bash
 # From a local checkout
-dsh plugin --profile <profile-name> add ./dsh-unit-conversion
+dsh plugin --profile <profile-name> add ./dsh-unitverse
 
 # Or from GitHub (build artifacts are committed, so no allowBuilds needed)
-dsh plugin --profile <profile-name> add github:runcat-tommy/dsh-unit-conversion
+dsh plugin --profile <profile-name> add github:runcat-tommy/dsh-unitverse
 ```
 
 `package.json` declares `dsh.bundle`, so `dsh plugin add` registers the plugin
@@ -155,7 +159,7 @@ ambiguous "degrees Kelvin"-style semantics.
 The conversion core is a zero-dependency pure module:
 
 ```ts
-import { convert, convertDetailed } from 'dsh-unit-conversion'
+import { convert, convertDetailed } from 'dsh-unitverse'
 
 convert(100, 'km', 'mi')                 // 62.13711922
 convert(25, '°C', '°F')                  // 77

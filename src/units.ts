@@ -1,5 +1,5 @@
 /**
- * Unit tables for dsh-unit-conversion.
+ * Unit tables for dsh-unitverse.
  *
  * Every unit belongs to exactly one of the ten supported categories and is
  * expressed relative to that category's base unit:

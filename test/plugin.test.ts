@@ -28,7 +28,7 @@ type ToolDef = {
 
 describe('plugin entry', () => {
   it('exposes plugin identity for Cordis', () => {
-    expect(name).toBe('unit-conversion')
+    expect(name).toBe('unitverse')
     expect(inject).toContain('tools')
   })
 
