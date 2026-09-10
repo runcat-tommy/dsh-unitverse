@@ -15,7 +15,7 @@
   "author": "runcat-tommy",
   "repository": {
     "type": "git",
-    "url": "https://github.com/runcat-tommy/dsh-unitverse.git"
+    "url": "git+https://github.com/runcat-tommy/dsh-unitverse.git"
   },
   "homepage": "https://github.com/runcat-tommy/dsh-unitverse",
   "bugs": {
